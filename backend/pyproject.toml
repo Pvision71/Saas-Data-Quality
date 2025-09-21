@@ -1,0 +1,18 @@
+[project]
+name = "backend"
+version = "0.1.0"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    "psycopg2-binary",
+    "duckdb",
+    "pandas",
+    "scikit-learn",
+    "pytest",
+    "openapi-spec-validator",
+    "clerk-sdk-python",
+]
+
+[tool.black]
+line-length = 88

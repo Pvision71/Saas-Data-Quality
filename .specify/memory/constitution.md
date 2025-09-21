@@ -1,50 +1,53 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+
+- Version change: None -> 1.0.0
+- List of modified principles:
+  - [PRINCIPLE_1_NAME] -> I. Content Accuracy
+  - [PRINCIPLE_2_NAME] -> II. User-Centric Design
+  - [PRINCIPLE_3_NAME] -> III. Modularity and Testability
+  - [PRINCIPLE_4_NAME] -> IV. Agent-Driven Development
+  - [PRINCIPLE_5_NAME] -> V. Data Privacy
+- Added sections:
+  - Additional Constraints
+  - Development Workflow
+- Removed sections: None
+- Templates requiring updates:
+  - ✅ .specify/templates/plan-template.md (No changes needed, aligns with principles)
+  - ✅ .specify/templates/spec-template.md (No changes needed, aligns with principles)
+  - ✅ .specify/templates/tasks-template.md (No changes needed, aligns with principles)
+- Follow-up TODOs: None
+-->
+
+# HomeCPA-Prep Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Content Accuracy
+All study materials, practice questions, and educational content MUST be rigorously verified for accuracy and kept up-to-date with the latest CPA exam syllabus and accounting standards. Rationale: The project's value is directly tied to the reliability of its content.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. User-Centric Design
+The user interface and experience MUST be intuitive, accessible, and focused on creating a seamless and effective learning environment. All design decisions should prioritize the user's journey from novice to exam-ready.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Modularity and Testability
+The codebase MUST be designed in a modular fashion. Every component SHOULD be independently testable. A Test-First approach is mandated for all new features, ensuring high test coverage and system reliability.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Agent-Driven Development
+This project is developed primarily by an AI agent with human oversight. All specifications, plans, and tasks MUST be sufficiently detailed, clear, and unambiguous to be executed by an agent. Prompts and instructions are considered part of the codebase.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Data Privacy
+All user data, including progress, scores, and personal information, MUST be handled with strict confidentiality and in full compliance with relevant data privacy regulations.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Additional Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+The technology stack should be chosen to optimize for long-term maintainability, security, and scalability. Any new dependency or technology MUST be justified and documented in the corresponding research document.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+The development process MUST follow the `specify -> plan -> tasks -> implement` workflow. Each stage requires the generation and approval of specific documents before proceeding to the next, ensuring a structured and predictable development cycle.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This Constitution is the supreme governing document for the HomeCPA-Prep project. It supersedes all other practices and conventions. Amendments to this constitution require a documented proposal, a review by the project owner, and a clear migration plan for any affected components. All development activities, including code reviews and automated checks, MUST verify compliance with these principles.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-09-21 | **Last Amended**: 2025-09-21

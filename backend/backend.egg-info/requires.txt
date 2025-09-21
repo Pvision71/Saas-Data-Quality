@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+psycopg2-binary
+duckdb
+pandas
+scikit-learn
+pytest
+openapi-spec-validator

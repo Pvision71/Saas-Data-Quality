@@ -1,0 +1,32 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest --watchAll=false"
+  },
+  "dependencies": {
+    "@clerk/clerk-react": "^5.2.8",
+    "jest-environment-jsdom": "^30.1.2",
+    "next": "15.5.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.0.0",
+    "@types/node": "20.14.13",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "eslint": "^8",
+    "eslint-config-next": "15.5.3",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5"
+  }
+}
