@@ -50,6 +50,9 @@
 - [X] T024 [P] Add comprehensive unit tests for all services in the backend.
 - [X] T025 [P] Add comprehensive unit tests for all components in the frontend.
 - [X] T026 [P] Write API documentation based on the OpenAPI spec and add it to the project.
+- [ ] T027 [P] Create user guide for the frontend application (e.g., how to create a project, add data source, view profiles).
+- [ ] T028 [P] Create developer setup guide (e.g., how to set up backend and frontend locally).
+- [ ] T029 [P] Document the overall application architecture and data flow.
 
 ## Dependencies
 - **Setup (T001-T006)** must be done first.
