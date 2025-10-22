@@ -21,24 +21,69 @@ The SaaS Data Quality Platform provides essential data quality management capabi
 
 The platform follows a **microservices architecture** designed for serverless deployment:
 
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        UI[Frontend<br/>Next.js 15 + React + TypeScript<br/>Tailwind CSS<br/>Port 3000]
+    end
+
+    subgraph "API Layer"
+        API[Backend API<br/>FastAPI + Python<br/>RESTful API<br/>Port 8000]
+    end
+
+    subgraph "Authentication"
+        AUTH[Clerk Auth<br/>User Management<br/>RBAC]
+    end
+
+    subgraph "Data Layer"
+        DB[(PostgreSQL<br/>Primary Database<br/>Application Data)]
+        ANALYTICS[(DuckDB<br/>In-Memory Analytics<br/>Data Profiling)]
+    end
+
+    UI -->|HTTPS/REST| API
+    API -->|Validate Token| AUTH
+    API -->|CRUD Operations| DB
+    API -->|Analytics Queries| ANALYTICS
+    UI -.->|Authentication| AUTH
+
+    style UI fill:#4f46e5,stroke:#312e81,stroke-width:2px,color:#fff
+    style API fill:#059669,stroke:#065f46,stroke-width:2px,color:#fff
+    style AUTH fill:#dc2626,stroke:#991b1b,stroke-width:2px,color:#fff
+    style DB fill:#2563eb,stroke:#1e40af,stroke-width:2px,color:#fff
+    style ANALYTICS fill:#7c3aed,stroke:#5b21b6,stroke-width:2px,color:#fff
 ```
-┌─────────────────┐
-│    Frontend     │  Next.js 15 + React + TypeScript
-│  (Port 3000)    │  Tailwind CSS
-└────────┬────────┘
-         │ HTTPS
-         ▼
-┌─────────────────┐
-│    Backend      │  FastAPI + Python
-│  (Port 8000)    │  RESTful API
-└────────┬────────┘
-         │
-    ┌────┴────┬──────────────┐
-    ▼         ▼              ▼
-┌────────┐ ┌─────────┐ ┌──────────┐
-│ Clerk  │ │PostgreSQL│ │  DuckDB  │
-│  Auth  │ │ Database │ │Analytics │
-└────────┘ └─────────┘ └──────────┘
+
+### Data Flow
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant Clerk
+    participant Backend
+    participant PostgreSQL
+    participant DuckDB
+
+    User->>Frontend: Access Application
+    Frontend->>Clerk: Authenticate User
+    Clerk-->>Frontend: Auth Token
+
+    User->>Frontend: Create Project
+    Frontend->>Backend: POST /projects (with token)
+    Backend->>Clerk: Validate Token
+    Clerk-->>Backend: Token Valid
+    Backend->>PostgreSQL: Insert Project
+    PostgreSQL-->>Backend: Project Created
+    Backend-->>Frontend: 201 Created
+    Frontend-->>User: Show Success
+
+    User->>Frontend: Profile Data Source
+    Frontend->>Backend: POST /datasources/profile
+    Backend->>DuckDB: Run Analytics Query
+    DuckDB-->>Backend: Profile Results
+    Backend->>PostgreSQL: Store Profile
+    Backend-->>Frontend: Profile Data
+    Frontend-->>User: Display Results
 ```
 
 ### Tech Stack
@@ -173,6 +218,63 @@ The platform manages the following core entities:
 - **Mapping**: Source-to-target schema mappings
 - **User**: Clerk-authenticated users with RBAC roles
 
+### Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    USER ||--o{ PROJECT : creates
+    PROJECT ||--o{ DATASOURCE : contains
+    PROJECT ||--o{ CLEANSINGRULE : defines
+    PROJECT ||--o{ MAPPING : has
+    DATASOURCE ||--o{ DATAPROFILE : profiled_by
+    DATASOURCE ||--o{ MAPPING : "source/target"
+
+    USER {
+        string id PK "From Clerk"
+        uuid organization_id
+        string role "admin, editor, viewer"
+    }
+
+    PROJECT {
+        uuid id PK
+        string name
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    DATASOURCE {
+        uuid id PK
+        uuid project_id FK
+        string name
+        string type "legacy_db, saas_app"
+        jsonb connection_details
+    }
+
+    DATAPROFILE {
+        uuid id PK
+        uuid datasource_id FK
+        string status "running, completed, failed"
+        jsonb results
+        timestamp created_at
+    }
+
+    CLEANSINGRULE {
+        uuid id PK
+        uuid project_id FK
+        string name
+        text description
+        jsonb implementation
+    }
+
+    MAPPING {
+        uuid id PK
+        uuid project_id FK
+        uuid source_datasource_id FK
+        uuid target_datasource_id FK
+        jsonb mapping_details
+    }
+```
+
 See `specs/001-saas-data-quality/data-model.md` for detailed entity definitions.
 
 ## Development
@@ -249,6 +351,53 @@ The platform is designed for serverless deployment on cloud platforms:
 - **Frontend**: Vercel, AWS Amplify, or similar
 - **Backend**: AWS Lambda, Google Cloud Run, or similar
 - **Database**: Managed PostgreSQL (AWS RDS, Google Cloud SQL, etc.)
+
+### Deployment Architecture
+
+```mermaid
+graph TB
+    subgraph "CDN/Edge"
+        CDN[Vercel Edge Network<br/>Static Assets + SSR]
+    end
+
+    subgraph "Frontend Hosting"
+        VERCEL[Vercel<br/>Next.js Application<br/>Auto-scaling]
+    end
+
+    subgraph "Backend Services"
+        LAMBDA[AWS Lambda / Cloud Run<br/>FastAPI Application<br/>Auto-scaling]
+        API_GW[API Gateway<br/>Rate Limiting & Caching]
+    end
+
+    subgraph "Authentication Service"
+        CLERK_CLOUD[Clerk Cloud<br/>Managed Auth Service]
+    end
+
+    subgraph "Data Services"
+        RDS[(AWS RDS / Cloud SQL<br/>PostgreSQL<br/>Managed Database)]
+        DUCKDB_LAMBDA[DuckDB<br/>In Lambda Runtime<br/>Ephemeral Analytics]
+    end
+
+    subgraph "Monitoring & Logging"
+        LOGS[CloudWatch / Cloud Logging]
+        METRICS[Application Metrics]
+    end
+
+    CDN -->|Serves| VERCEL
+    VERCEL -->|API Calls| API_GW
+    API_GW -->|Routes| LAMBDA
+    LAMBDA -->|Validate| CLERK_CLOUD
+    LAMBDA -->|Queries| RDS
+    LAMBDA -->|Analytics| DUCKDB_LAMBDA
+    LAMBDA -.->|Logs| LOGS
+    LAMBDA -.->|Metrics| METRICS
+
+    style CDN fill:#0ea5e9,stroke:#0369a1,stroke-width:2px,color:#fff
+    style VERCEL fill:#4f46e5,stroke:#312e81,stroke-width:2px,color:#fff
+    style LAMBDA fill:#059669,stroke:#065f46,stroke-width:2px,color:#fff
+    style CLERK_CLOUD fill:#dc2626,stroke:#991b1b,stroke-width:2px,color:#fff
+    style RDS fill:#2563eb,stroke:#1e40af,stroke-width:2px,color:#fff
+```
 
 ## Contributing
 
